@@ -1,3 +1,4 @@
+from json import loads
 from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view, permission_classes
@@ -56,6 +57,8 @@ def add_tip(request):
         home_odds = tip_request['home_odds'],
         away_odds = tip_request['draw_odds'],
         draw_odds = tip_request['away_odds'],
+        is_vip_tip = tip_request['isVip'],
+        is_featured = tip_request['isFeatured']
     )
 
     # if successfully added a tip
@@ -74,6 +77,8 @@ def end_fixture(request):
     fixture_to_edit.status = fixture_request['status']
 
     fixture_to_edit.save()
+
+    print(fixture_to_edit)
 
     success_message = {
             "success": "Operation completed successfully"
@@ -127,3 +132,21 @@ def featured_match(request):
         featured_match = Tip.objects.filter(prediction_odds=most_odds)
         
         return HttpResponse(serialize('json',featured_match), content_type='application/json')
+
+    
+@api_view(['DELETE'])
+def delete_prediction(request, id):
+    match_id = id
+    selected_match = Tip.objects.get(pk=match_id)
+
+    if(selected_match is not None):
+        selected_match.delete()
+        delete_message = {
+            "message": "Successfully deleted"
+        }
+        return JsonResponse(delete_message, safe=False)
+
+    error_delete = {
+        "error": "Failed to delete the item"
+    }
+    return JsonResponse(error_delete, safe=False)

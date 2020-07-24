@@ -110,6 +110,33 @@ def user_profile(request):
     return JsonResponse(user_obj, safe=False)
 
 
+@api_view(['PUT'])
+def make_vip(request):
+    update_request = json.loads(request.body)
+    user_id = update_request['id']
+    member = Customer.objects.get(pk=user_id)
+    member.is_vip = update_request['isVip']
+    member.save()
+
+    success_message = {
+        'message': 'user added to vip'
+    }
+
+    return JsonResponse(success_message, safe=False)
+
+@api_view(['DELETE'])
+def delete_user(request, id):
+    user_id = id
+    user_to_delete = Customer.objects.get(pk=id)
+    user_to_delete.delete()
+
+    success_message = {
+        'message': 'user deleted'
+    }
+
+    return JsonResponse(success_message, safe=False)
+
+
 # a helper function that converts the request body object to a json string.
 # could be used in a number of areas in this view
 def request_body(params):

@@ -15,6 +15,7 @@ class Tip(models.Model):
     status = models.BooleanField(null=True)
     created_at = models.DateTimeField(default=datetime.now)
     is_vip_tip = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'tips'
