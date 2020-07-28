@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '31.220.55.201',
+    '192.168.0.102'
 ]
 
 # Application definition
@@ -169,6 +170,8 @@ JWT_AUTH = {
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Africa/Nairobi'
+
+DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
 USE_I18N = True
 

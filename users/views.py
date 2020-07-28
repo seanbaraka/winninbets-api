@@ -1,3 +1,5 @@
+from datetime import timedelta, datetime
+
 from django.shortcuts import render
 from django.core.serializers import serialize
 from rest_framework.permissions import IsAuthenticated
@@ -73,7 +75,7 @@ def login(request):
         error_message = {
             "message": "Invalid login credentials"
         }
-        return JsonResponse(status=404,data=error_message, safe=False)
+        return JsonResponse(status=404, data=error_message, safe=False)
 
     try:
         payload = JWT_PAYLOAD_HANDLER(user_to_login)
@@ -105,7 +107,10 @@ def user_profile(request):
         'telephone': some_data['telephone'],
         'location': some_data['location'],
         'is_vip': some_data['is_vip'],
-        'referrals': some_data['referrals']
+        'referrals': some_data['referrals'],
+        'made_vip': some_data['updated_at'],
+        'vip_expiry': some_data['vip_expiry'],
+        'referral_code': some_data['referral_code']
     }
     return JsonResponse(user_obj, safe=False)
 
@@ -116,6 +121,7 @@ def make_vip(request):
     user_id = update_request['id']
     member = Customer.objects.get(pk=user_id)
     member.is_vip = update_request['isVip']
+    member.vip_expiry = timedelta(days=30, hours=0)
     member.save()
 
     success_message = {

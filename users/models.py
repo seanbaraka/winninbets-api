@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 import uuid
@@ -57,7 +59,10 @@ class Customer(models.Model):
     telephone = models.CharField(max_length=15)
     location = models.CharField(max_length=50)
     is_vip = models.BooleanField(default=False)
+    updated_at = models.DateField(auto_now=True)
+    vip_expiry = models.DurationField(null=True)
     referrals = models.IntegerField(default=0)
+    referral_code = models.CharField(null=True, max_length=20)
 
     class Meta:
         db_table = 'members'
