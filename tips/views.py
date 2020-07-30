@@ -119,7 +119,7 @@ def featured_match(request):
             
         most_odds = max(odds)
 
-        featured_match = Tip.objects.filter(prediction_odds=most_odds)
+        featured_match = Tip.objects.filter(is_featured=True).first()
 
         return HttpResponse(serialize('json', featured_match), content_type='application/json')
 

@@ -101,7 +101,9 @@ def user_profile(request):
     member = Customer.objects.get(user=user)
 
     some_data = member.__dict__
+    print(some_data)
     user_obj = {
+        'id': some_data['id'],
         'first_name': some_data['first_name'],
         'last_name': some_data['last_name'],
         'telephone': some_data['telephone'],
