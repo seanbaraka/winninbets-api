@@ -124,8 +124,9 @@ def make_vip(request):
     member = Customer.objects.get(pk=user_id)
     member.is_vip = update_request['isVip']
     member.vip_expiry = timedelta(days=30, hours=0)
-    member.save()
+    saved = member.save()
     
+    print(saved)
     success_message = {
         'message': 'user added to vip'
     }

@@ -38,9 +38,9 @@ def get_tips(request):
 def recent_tips(request):
     user = request.user
     if request.auth is not None and user.member.is_vip:
-        tips_queryset = Tip.objects.filter(status=None)
+        tips_queryset = Tip.objects.filter(status=None).order_by('-match_date')
     else:
-        tips_queryset = Tip.objects.filter(is_vip_tip=False, status=None)
+        tips_queryset = Tip.objects.filter(is_vip_tip=False, status=None).order_by('-match_date')
 
     tips_json = serialize('json', tips_queryset)
 
@@ -92,8 +92,6 @@ def end_fixture(request):
 
     fixture_to_edit.save()
 
-    print(fixture_to_edit)
-
     success_message = {
         "success": "Operation completed successfully"
     }
@@ -135,7 +133,8 @@ def featured_match(request):
 
         most_odds = max(odds)
 
-        featured_match = recent_matches.filter(is_featured=True).first()
+        featured_match = recent_matches.filter(is_featured=True)
+
 
         return HttpResponse(serialize('json', featured_match), content_type='application/json')
 
@@ -145,7 +144,7 @@ def featured_match(request):
             odds.append(match.prediction_odds)
 
         most_odds = max(odds)
-        featured_match = recent_matches.filter(is_featured=True).first()
+        featured_match = recent_matches.filter(is_featured=True)
 
         return HttpResponse(serialize('json', featured_match), content_type='application/json')
 
@@ -166,3 +165,4 @@ def delete_prediction(request, id):
         "error": "Failed to delete the item"
     }
     return JsonResponse(error_delete, safe=False)
+
