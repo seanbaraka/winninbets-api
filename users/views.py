@@ -117,6 +117,7 @@ def user_profile(request):
 
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def make_vip(request):
     update_request = json.loads(request.body)
     user_id = update_request['id']
@@ -124,7 +125,7 @@ def make_vip(request):
     member.is_vip = update_request['isVip']
     member.vip_expiry = timedelta(days=30, hours=0)
     member.save()
-
+    
     success_message = {
         'message': 'user added to vip'
     }

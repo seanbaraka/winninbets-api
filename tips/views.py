@@ -1,6 +1,11 @@
+from datetime import datetime
 from json import loads
+from nis import match
+from django.conf import Settings
 from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
+from django.utils.timezone import get_current_timezone, make_aware
+from django.utils import timezone
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from .models import Tip
@@ -15,13 +20,13 @@ import json
 def get_tips(request):
     user_accessing_tips = request.user
     if user_accessing_tips.is_staff:
-        tips_queryset = Tip.objects.all()
+        tips_queryset = Tip.objects.all().order_by('match_date')
         return HttpResponse(serialize('json', tips_queryset), content_type='application/json')
 
     if request.auth is not None and user_accessing_tips.member.is_vip:
-        tips_queryset = Tip.objects.all()
+        tips_queryset = Tip.objects.all().order_by('match_date')
     else:
-        tips_queryset = Tip.objects.filter(is_vip_tip=False)
+        tips_queryset = Tip.objects.filter(is_vip_tip=False).order_by('match_date')
 
     tips_json = serialize('json', tips_queryset)
 
@@ -47,12 +52,18 @@ def recent_tips(request):
 def add_tip(request):
     # serialize the request.body object to a python list/dict
     tip_request = json.loads(request.body)
+    # Selecting the current timezone in utc
+    tmzone = timezone.utc
+    # converting the string into a date object
+    matchdate=datetime.strptime(tip_request['date'],'%Y-%m-%dT%H:%M')
+    #making the date time aware
+    somedate = make_aware(matchdate, tmzone)
 
     # attempt to add a tip to the database
     tip_to_add = Tip.objects.create(
         home_team=tip_request['home'],
         away_team=tip_request['away'],
-        match_date=tip_request['date'],
+        match_date=somedate,
         prediction=tip_request['prediction'],
         prediction_odds=tip_request['prediction_odds'],
         home_odds=tip_request['home_odds'],

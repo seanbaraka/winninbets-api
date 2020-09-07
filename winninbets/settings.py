@@ -32,7 +32,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '31.220.55.201',
-    '192.168.0.102'
+    '192.168.0.102',
+    '192.168.43.68'
 ]
 
 # Application definition
@@ -68,7 +69,8 @@ CORS_ORIGIN_WHITELIST = (
        'http://www.winninbets.co.ke',
        'https://www.winninbets.co.ke',
        'http://winninbets.co.ke',
-       'https://winninbets.co.ke'
+       'https://winninbets.co.ke',
+       'http://192.168.43.68:4200'
 )
 
 ROOT_URLCONF = 'winninbets.urls'
