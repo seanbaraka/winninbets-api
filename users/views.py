@@ -101,6 +101,7 @@ def user_profile(request):
     member = Customer.objects.get(user=user)
 
     some_data = member.__dict__
+    print(some_data)
     user_obj = {
         'id': some_data['id'],
         'first_name': some_data['first_name'],
@@ -125,8 +126,7 @@ def make_vip(request):
     member.is_vip = update_request['isVip']
     member.vip_expiry = timedelta(days=30, hours=0)
     saved = member.save()
-    
-    print(saved)
+
     success_message = {
         'message': 'user added to vip'
     }
