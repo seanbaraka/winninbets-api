@@ -103,7 +103,6 @@ def end_fixture(request):
     if fixture_request['prediction_odds'] != '':
         fixture_to_edit.prediction_odds = fixture_request['prediction_odds']
 
-    print(fixture_request)
     fixture_to_edit.save()
 
     success_message = {
