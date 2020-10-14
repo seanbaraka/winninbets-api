@@ -60,6 +60,7 @@ def add_tip(request):
     somedate = make_aware(matchdate, tmzone)
 
     # attempt to add a tip to the database
+    
     tip_to_add = Tip.objects.create(
         home_team=tip_request['home'],
         away_team=tip_request['away'],
@@ -84,12 +85,25 @@ def add_tip(request):
 @api_view(['PUT'])
 def end_fixture(request):
     fixture_request = json.loads(request.body)
+    
     fixture_to_edit = Tip.objects.get(
         id=fixture_request['id'])  # get the Tip associated with the id passed in the request body
 
     fixture_to_edit.score = fixture_request['score']
     fixture_to_edit.status = fixture_request['status']
+    if fixture_request['home'] != '':
+        fixture_to_edit.home_team = fixture_request['home']
+    
+    if fixture_request['away'] != '':
+        fixture_to_edit.away_team = fixture_request['away']
+    
+    if fixture_request['prediction'] != '':
+        fixture_to_edit.prediction = fixture_request['prediction']
 
+    if fixture_request['prediction_odds'] != '':
+        fixture_to_edit.prediction_odds = fixture_request['prediction_odds']
+
+    print(fixture_request)
     fixture_to_edit.save()
 
     success_message = {
