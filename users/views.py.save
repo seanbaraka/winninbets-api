@@ -16,7 +16,8 @@ import json
 
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
 JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
-
+fuser -k 8000/tcp
+bg
 
 @api_view(['GET'])
 def users_list(request):
@@ -101,6 +102,7 @@ def user_profile(request):
     member = Customer.objects.get(user=user)
 
     some_data = member.__dict__
+    print(some_data)
     user_obj = {
         'id': some_data['id'],
         'first_name': some_data['first_name'],
